@@ -66,7 +66,7 @@ L3 = 6.0
 # Mechanical joint limits
 S_LIM = (-90, 90)
 E_LIM = (-90, 90)
-W_LIM = (-90, 0)
+W_LIM = (-140, 0)
 
 # Defined gait patterns
 TRIPOD_GAIT = True
@@ -118,6 +118,11 @@ def write_leg(leg, point):
         finalE = math.degrees(e)
         finalW = math.degrees(w)
 
+        if finalS > 180:
+            finalS = finalS - 360
+
+        if finalS < -180:
+            finalS = finalS + 360
         # Boundary check the leg angles
         if not (S_LIM[0] <= finalS <= S_LIM[1]):
             print("Invalid S angle!")
@@ -183,30 +188,29 @@ def move_leg(leg, point, steps = 10):
         
         # Move leg to the interpolated position
         if write_leg(leg, interp_point) != 0:
-            print(f"Interpolation step {i} failed at ({interp_point.x}, {interp_point.y}, {interp_point.z})")
-            print(f"Associated servo numbers: {leg.servoS}, {leg.servoE}, {leg.servoW}")
+            #print(f"Interpolation step {i} failed at ({interp_point.x}, {interp_point.y}, {interp_point.z})")
+            #print(f"Associated servo numbers: {leg.servoS}, {leg.servoE}, {leg.servoW}")
             return 1  # Stop if movement fails
         # Use I2C to move servos here
         with I2CLock:
-            print(f"Moving servo {leg.servoS}, to {leg.angleS}")
+            #print(f"Moving servo {leg.servoS}, to {leg.angleS}")
             """ 
             pwm = angle_to_pwm(leg.angleS)
             pca.channels[leg.servoS].duty_cycle = pwm
             """
-            print(f"Moving servo {leg.servoE}, to {leg.angleE}")
+            #print(f"Moving servo {leg.servoE}, to {leg.angleE}")
             """ 
             pwm = angle_to_pwm(leg.angleE)
             pca.channels[leg.servoE].duty_cycle = pwm
             """
-            print(f"Moving servo {leg.servoW}, to {leg.angleW}")
+            #print(f"Moving servo {leg.servoW}, to {leg.angleW}")
             """ 
             pwm = angle_to_pwm(leg.angleW)
             pca.channels[leg.servoW].duty_cycle = pwm
             """
 
     return 0
-# Bézier curve function to calculate the interpolated position at time t
-# ChatGPT is awesome
+# Bezier curve function to calculate the interpolated position at time t
 def bezier_curve(t, p0, p1, p2, p3):
     # Calculate the cubic Bézier curve position
     x = (1 - t)**3 * p0.x + 3 * (1 - t)**2 * t * p1.x + 3 * (1 - t) * t**2 * p2.x + t**3 * p3.x
@@ -244,9 +248,9 @@ legs = [
     Leg(Point3D(-4.317, 4.317, startingHeight), 0, 1, 2, 135), #Front left
     Leg(Point3D(-6.106, 0, startingHeight), 3, 4, 5, 180), #Center left
     Leg(Point3D(-4.317, -4.317, startingHeight), 6, 7, 8, -135), #Back left
-    Leg(Point3D(4.317, -4.317, startingHeight), 9, 10, 11, 45), #Back right
+    Leg(Point3D(4.317, -4.317, startingHeight), 9, 10, 11, -45), #Back right
     Leg(Point3D(6.106, 0, startingHeight), 12, 13, 14, 0), #Center right
-    Leg(Point3D(4.317, 4.317, startingHeight), 15, 16, 17, -45) #Front right
+    Leg(Point3D(4.317, 4.317, startingHeight), 15, 16, 17, 45) #Front right
 ]
 # Leg Aliases for readability
 FL = legs[0]
@@ -316,8 +320,8 @@ move_leg(CR, CRHome)
 move_leg(FR, FRHome)
 # This is a filler number, will need to calculate later
 # Center of the stride based on the CR leg, every leg should stride approximately this distance from the origin
-strideCenter = 22
-strideRadius = 2
+strideCenter = 17
+strideRadius = 4
 
 # Given distance, as a proportion of radius and angle for given stride return control point tupple
 def completeStrideCalculation(leg, distance, angle, angleOffset):
@@ -338,7 +342,7 @@ def completeHeadingCalculation(leg, distance, strafe, heading, offset):
 
 # Main loop - your other robot code can go here
 try:
-    while True: # will run once every time a stride is completed
+    while False: # will run once every time a stride is completed
         # Filler value, need to figure out when I have the controller connected
         thisDistance = 0
         # Filler value, need to connect controller, might be +/- 90 out of phase
