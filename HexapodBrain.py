@@ -31,20 +31,37 @@ class MyController(Controller):
     def on_x_release(self):
        print("Goodbye world")
 
-    def on_L2_press(self, value):
-        print("on_L2_press: ", value)
-
-    def on_R2_press(self, value):
-        print("on_R2_press: ", value)
-
     def on_L3_up(self, value):
-        print("on_L3_up: ", value)
+        if value < 0:
+            print("on_L3_up: ", value)
 
     def on_R3_up(self, value):
-        print("on_R3_up: ", value)
+        if value < 0:
+            print("on_R3_up: ", value)
+
+    def on_L3_left(self, value):
+        if value < 0:
+            print("on_L3_up: ", value)
 
     def on_R3_left(self, value):
-        return
+        if value < 0:
+            print("on_R3_up: ", value)
+
+    def on_L3_right(self, value):
+        if value < 0:
+            print("on_L3_up: ", value)
+
+    def on_R3_right(self, value):
+        if value < 0:
+            print("on_R3_up: ", value)
+        
+    def on_L3_down(self, value):
+        if value < 0:
+            print("on_L3_up: ", value)
+
+    def on_R3_down(self, value):
+        if value < 0:
+            print("on_R3_up: ", value)
 
 
 
