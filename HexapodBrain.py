@@ -39,11 +39,11 @@ class MyController(Controller):
             print("on_R3_up: ", value)
 
     def on_L3_left(self, value):
-        if value > 0:
+        if value < 0:
             print("on_L3_left: ", value)
 
     def on_R3_left(self, value):
-        if value > 0:
+        if value < 0:
             print("on_R3_left: ", value)
 
     def on_L3_right(self, value):
