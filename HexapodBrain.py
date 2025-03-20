@@ -3,7 +3,6 @@ import threading
 import time
 import inputs  # For reading the controller input
 from inputs import devices
-"""
 import time
 import board
 import busio
@@ -20,7 +19,6 @@ def angle_to_pwm(angle):
     pwm_min = 150  # 500us
     pwm_max = 600  # 2500us
     return int(pwm_min + (angle / 180.0) * (pwm_max - pwm_min))
-"""
 I2CLock = threading.Lock()
 
 # A global variable to store the input state
@@ -194,20 +192,14 @@ def move_leg(leg, point, steps = 10):
         # Use I2C to move servos here
         with I2CLock:
             #print(f"Moving servo {leg.servoS}, to {leg.angleS}")
-            """ 
             pwm = angle_to_pwm(leg.angleS)
             pca.channels[leg.servoS].duty_cycle = pwm
-            """
             #print(f"Moving servo {leg.servoE}, to {leg.angleE}")
-            """ 
             pwm = angle_to_pwm(leg.angleE)
             pca.channels[leg.servoE].duty_cycle = pwm
-            """
             #print(f"Moving servo {leg.servoW}, to {leg.angleW}")
-            """ 
             pwm = angle_to_pwm(leg.angleW)
             pca.channels[leg.servoW].duty_cycle = pwm
-            """
 
     return 0
 # Bezier curve function to calculate the interpolated position at time t
@@ -269,7 +261,7 @@ FRHome = Point3D(14, 14, 0)
 # Communication loop
 # Wait for controller to connect
 # Main function to handle waiting for a controller to be connected
-# wait_for_controller()
+wait_for_controller()
 ControlThread = threading.Thread(target=read_dualshock4_input)
 ControlThread.daemon = True
 ControlThread.start()
@@ -342,21 +334,21 @@ def completeHeadingCalculation(leg, distance, strafe, heading, offset):
 
 # Main loop - your other robot code can go here
 try:
-    while False: # will run once every time a stride is completed
+    while True: # will run once every time a stride is completed
         # Filler value, need to figure out when I have the controller connected
         thisDistance = 0
         # Filler value, need to connect controller, might be +/- 90 out of phase
         thisStrafe = 0
         # Filler value, same as before
         thisHeading = 0
-        '''
+    
         if is_controller_connected() == False:
             print("Lost controller connection!")
             thisDistance = 0
             thisStrafe = 0
             thisHeading = 0
             wait_for_controller()
-            continue '''
+            continue
         if thisDistance == 0:
             TFL = threading.Thread(target=move_leg, args=(FL, FLHome))
             TCL = threading.Thread(target=move_leg, args=(CL, CLHome))
