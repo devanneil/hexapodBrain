@@ -19,7 +19,6 @@ def angle_to_pwm(angle):
     pwm_max = 600  # 2500us
     return int(pwm_min + (angle / 180.0) * (pwm_max - pwm_min))
 I2CLock = threading.Lock()
-
 class MyController(Controller):
 
     def __init__(self, **kwargs):
@@ -32,35 +31,35 @@ class MyController(Controller):
        print("Goodbye world")
 
     def on_L3_up(self, value):
-        if value < 0:
+        if value > 0:
             print("on_L3_up: ", value)
 
     def on_R3_up(self, value):
-        if value < 0:
+        if value > 0:
             print("on_R3_up: ", value)
 
     def on_L3_left(self, value):
-        if value < 0:
+        if value > 0:
             print("on_L3_up: ", value)
 
     def on_R3_left(self, value):
-        if value < 0:
+        if value > 0:
             print("on_R3_up: ", value)
 
     def on_L3_right(self, value):
-        if value < 0:
+        if value > 0:
             print("on_L3_up: ", value)
 
     def on_R3_right(self, value):
-        if value < 0:
+        if value > 0:
             print("on_R3_up: ", value)
         
     def on_L3_down(self, value):
-        if value < 0:
+        if value > 0:
             print("on_L3_up: ", value)
 
     def on_R3_down(self, value):
-        if value < 0:
+        if value > 0:
             print("on_R3_up: ", value)
 
 
