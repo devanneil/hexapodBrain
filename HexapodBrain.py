@@ -9,7 +9,7 @@ import board
 from adafruit_pca9685 import PCA9685
 
 # Create the I2C bus interface
-i2c = busio.I2C(board.GP8, board.GP9)
+i2c = busio.I2C(board.SCL, board.SDA)
 
 # Create a PCA9685 object
 pca = PCA9685(i2c)
