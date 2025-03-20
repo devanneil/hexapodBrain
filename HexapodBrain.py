@@ -218,9 +218,12 @@ legs = [
     Leg(Point3D(-4.317, 4.317, startingHeight), 0, 1, 2, 135), #Front left
     Leg(Point3D(-6.106, 0, startingHeight), 3, 4, 5, 180), #Center left
     Leg(Point3D(-4.317, -4.317, startingHeight), 6, 7, 8, -135), #Back left
-    Leg(Point3D(4.317, -4.317, startingHeight), 9, 10, 11, -45), #Back right
-    Leg(Point3D(6.106, 0, startingHeight), 12, 13, 14, 0), #Center right
-    Leg(Point3D(4.317, 4.317, startingHeight), 15, 16, 17, 45) #Front right
+    #Leg(Point3D(4.317, -4.317, startingHeight), 9, 10, 11, -45), #Back right
+    #Leg(Point3D(6.106, 0, startingHeight), 12, 13, 14, 0), #Center right
+    #Leg(Point3D(4.317, 4.317, startingHeight), 15, 16, 17, 45) #Front right
+    Leg(Point3D(4.317, -4.317, startingHeight), 0, 0, 0, -45), #Back right
+    Leg(Point3D(6.106, 0, startingHeight), 0, 0, 0, 0), #Center right
+    Leg(Point3D(4.317, 4.317, startingHeight), 0, 0, 0, 45) #Front right
 ]
 # Leg Aliases for readability
 FL = legs[0]
