@@ -1,12 +1,11 @@
 import math
 import threading
 import time
-import inputs  # For reading the controller input
-from inputs import devices
 import time
 import busio
 import board
 from adafruit_pca9685 import PCA9685
+from pyPS4Controller.controller import Controller
 
 # Create the I2C bus interface
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -21,51 +20,20 @@ def angle_to_pwm(angle):
     return int(pwm_min + (angle / 180.0) * (pwm_max - pwm_min))
 I2CLock = threading.Lock()
 
-# A global variable to store the input state
-controller_state = {}
+class MyController(Controller):
 
-# Function to check if the controller is connected
-import subprocess
+    def __init__(self, **kwargs):
+        Controller.__init__(self, **kwargs)
 
-def is_controller_connected():
-    try:
-        # Run the bluetoothctl command and get the list of connected devices
-        result = subprocess.run(['bluetoothctl', 'info'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    def on_x_press(self):
+       print("Hello world")
 
-        # Check if "Wireless Controller" or "DualShock" appears in the output
-        if 'Wireless Controller' in result.stdout or 'DualShock' in result.stdout:
-            print("Controller connected!")
-            return True
-        else:
-            print("No controller detected.")
-            return False
-
-    except Exception as e:
-        print(f"Error checking controller: {e}")
-        return False
+    def on_x_release(self):
+       print("Goodbye world")
 
 
-def wait_for_controller():
-    print("Waiting for DualShock 4 controller to be connected...")
-    while not is_controller_connected():
-        time.sleep(1)  # Wait for 1 second before checking again
-        print("Controller not connected. Trying again...")
-    
-    print("Controller connected!")
-
-# Define a function that reads DualShock 4 input
-def read_dualshock4_input():
-    global controller_state
-    while True:
-        events = inputs.get_key()
-        
-        for event in events:
-            # Process the event (key/button press)
-            if event.ev_type == 'Key':
-                controller_state[event.ev_type] = event.ev_code  # Store the event code (e.g., button press)
-                print(f"Button: {event.ev_code} Value: {event.ev_value}")
-
-        time.sleep(0.01)  # Add a small delay to avoid hogging the CPU
+controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
+controller.listen()
 
 # Mechanical leg segments measured from axis to axis
 L1 = 6.0
@@ -272,10 +240,6 @@ FRHome = Point3D(14, 14, 0)
 # Communication loop
 # Wait for controller to connect
 # Main function to handle waiting for a controller to be connected
-wait_for_controller()
-ControlThread = threading.Thread(target=read_dualshock4_input)
-ControlThread.daemon = True
-ControlThread.start()
 #Stand up sequence
 FL.currentPos = Point3D(FLHome.x, FLHome.y, startingHeight)
 CL.currentPos = Point3D(CLHome.x, CLHome.y, startingHeight)
@@ -352,14 +316,6 @@ try:
         thisStrafe = 0
         # Filler value, same as before
         thisHeading = 0
-    
-        if is_controller_connected() == False:
-            print("Lost controller connection!")
-            thisDistance = 0
-            thisStrafe = 0
-            thisHeading = 0
-            wait_for_controller()
-            continue
         if thisDistance == 0:
             TFL = threading.Thread(target=move_leg, args=(FL, FLHome))
             TCL = threading.Thread(target=move_leg, args=(CL, CLHome))
@@ -410,9 +366,6 @@ try:
         TCR.join()
         TBL.join()
         TBR.join()
-
-
-    ControlThread.join()
 
         
 
