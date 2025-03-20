@@ -309,7 +309,7 @@ def completeHeadingCalculation(leg, distance, strafe, heading, offset):
     return path
 
 ControlThread = threading.Thread(target=controller.listen)
-ControlThread.setDaemon()
+ControlThread.daemon = True
 ControlThread.start()
 # Main loop - your other robot code can go here
 try:
