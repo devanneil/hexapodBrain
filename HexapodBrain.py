@@ -4,8 +4,8 @@ import time
 import inputs  # For reading the controller input
 from inputs import devices
 import time
-import board
 import busio
+import board
 from adafruit_pca9685 import PCA9685
 
 # Create the I2C bus interface
