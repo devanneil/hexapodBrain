@@ -25,14 +25,25 @@ I2CLock = threading.Lock()
 controller_state = {}
 
 # Function to check if the controller is connected
+import subprocess
+
 def is_controller_connected():
-    # Get the list of connected devices
-    for device in devices:
-        # Check if a DualShock 4 controller is connected (you can also check for other controllers)
-        print(device.name)
-        if 'Wireless Controller' in device.name:  # This checks for the presence of a DualShock 4
+    try:
+        # Run the bluetoothctl command and get the list of connected devices
+        result = subprocess.run(['bluetoothctl', 'info'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+        # Check if "Wireless Controller" or "DualShock" appears in the output
+        if 'Wireless Controller' in result.stdout or 'DualShock' in result.stdout:
+            print("Controller connected!")
             return True
-    return False
+        else:
+            print("No controller detected.")
+            return False
+
+    except Exception as e:
+        print(f"Error checking controller: {e}")
+        return False
+
 
 def wait_for_controller():
     print("Waiting for DualShock 4 controller to be connected...")
