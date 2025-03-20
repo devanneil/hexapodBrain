@@ -43,6 +43,9 @@ class MyController(Controller):
     def on_R3_up(self, value):
         print("on_R3_up: ", value)
 
+    def on_R3_left(self, value):
+        return
+
 
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
