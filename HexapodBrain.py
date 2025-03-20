@@ -30,7 +30,7 @@ def is_controller_connected():
     for device in devices:
         # Check if a DualShock 4 controller is connected (you can also check for other controllers)
         print(device.name)
-        if 'Controller' in device.name:  # This checks for the presence of a DualShock 4
+        if 'Wireless Controller' in device.name:  # This checks for the presence of a DualShock 4
             return True
     return False
 
