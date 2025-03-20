@@ -203,13 +203,13 @@ def move_leg(leg, point, steps = 10):
         # Use I2C to move servos here
         with I2CLock:
             #print(f"Moving servo {leg.servoS}, to {leg.angleS}")
-            pwm = angle_to_pwm(leg.angleS)
+            pwm = angle_to_pwm(leg.angleS + 90)
             pca.channels[leg.servoS].duty_cycle = pwm
             #print(f"Moving servo {leg.servoE}, to {leg.angleE}")
-            pwm = angle_to_pwm(leg.angleE)
+            pwm = angle_to_pwm(leg.angleE + 90)
             pca.channels[leg.servoE].duty_cycle = pwm
             #print(f"Moving servo {leg.servoW}, to {leg.angleW}")
-            pwm = angle_to_pwm(leg.angleW)
+            pwm = angle_to_pwm(leg.angleW + 90)
             pca.channels[leg.servoW].duty_cycle = pwm
 
     return 0
