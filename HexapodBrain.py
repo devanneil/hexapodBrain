@@ -31,6 +31,19 @@ class MyController(Controller):
     def on_x_release(self):
        print("Goodbye world")
 
+    def on_L2_press(self, value):
+        print("on_L2_press: ", value)
+
+    def on_R2_press(self, value):
+        print("on_R2_press: ", value)
+
+    def on_L3_up(self, value):
+        print("on_L3_up: ", value)
+
+    def on_R3_up(self, value):
+        print("on_R3_up: ", value)
+
+
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 
@@ -308,9 +321,7 @@ def completeHeadingCalculation(leg, distance, strafe, heading, offset):
     path[2] = SP[2]  # Keep the center point from SP
     return path
 
-ControlThread = threading.Thread(target=controller.listen)
-ControlThread.daemon = True
-ControlThread.start()
+controller.listen()
 # Main loop - your other robot code can go here
 try:
     while True: # will run once every time a stride is completed
