@@ -33,7 +33,6 @@ class MyController(Controller):
 
 
 controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
-controller.listen()
 
 # Mechanical leg segments measured from axis to axis
 L1 = 6.0
@@ -306,7 +305,9 @@ def completeHeadingCalculation(leg, distance, strafe, heading, offset):
     path[2] = SP[2]  # Keep the center point from SP
     return path
 
-
+ControlThread = threading.Thread(target=controller.listen)
+ControlThread.setDaemon()
+ControlThread.start()
 # Main loop - your other robot code can go here
 try:
     while True: # will run once every time a stride is completed
@@ -370,4 +371,5 @@ try:
         
 
 except KeyboardInterrupt:
+    ControlThread.join()
     print("Program interrupted, shutting down.")
